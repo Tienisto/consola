@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io' as io;
 
+import 'package:consola/src/component.dart';
 import 'package:consola/src/console_executor.dart';
+import 'package:consola/src/coordinate.dart';
 import 'package:consola/src/strings.dart';
 
 /// Provides static methods to manipulate the console.
@@ -79,6 +81,35 @@ class Console {
   /// It is the number of rows in the terminal.
   static int getWindowHeight() {
     return instance.getWindowHeight();
+  }
+
+  /// Returns the current cursor position.
+  static ConsoleCoordinate getCursorPosition() {
+    return instance.getCursorPosition();
+  }
+
+  /// Draws a component to the console.
+  static void draw(
+    ConsoleComponent component, {
+    bool restoreCursor = false,
+    ConsoleCoordinate? cursor,
+  }) {
+    instance.draw(
+      component,
+      restoreCursor: restoreCursor,
+      cursor: cursor,
+    );
+  }
+
+  /// Draws multiple components to the console.
+  /// Components should draw with the absolute cursor position.
+  static void drawMultiple(
+    Iterable<AbsoluteConsoleComponent> components, {
+    bool restoreCursor = true,
+    ConsoleCoordinate? cursor,
+  }) {
+    instance.drawMultiple(components,
+        restoreCursor: restoreCursor, cursor: cursor);
   }
 
   /// Moves the cursor up by [n] rows; the default is 1.

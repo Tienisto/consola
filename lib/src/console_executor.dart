@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io' as io;
 
+import 'package:consola/src/component.dart';
+import 'package:consola/src/coordinate.dart';
 import 'package:consola/src/strings.dart';
 
 class ConsoleExecutor {
@@ -96,6 +98,106 @@ class ConsoleExecutor {
     return _stdout.terminalLines;
   }
 
+  ConsoleCoordinate getCursorPosition([bool flush = false]) {
+    final bool prevLineMode = _stdin.lineMode;
+    try {
+      _stdin.echoMode = false;
+      _stdin.lineMode = false;
+
+      _stdout.write(ConsoleStrings.deviceStatusReport);
+
+      final yBytes = <int>[];
+      final xBytes = <int>[];
+      int counter = 0;
+      bool readY = false;
+      bool readX = false;
+
+      // Parsing the response which is in "ESC[y;xR" format
+      while (counter < 32) {
+        final char = _stdin.readByteSync();
+
+        if (char == -1) {
+          break; // EOF
+        }
+
+        if (readX) {
+          if (char == 82) {
+            // found "R"
+            break;
+          }
+          xBytes.add(char);
+        } else if (readY) {
+          if (char == 59) {
+            // found ";"
+            readX = true;
+            continue;
+          }
+          yBytes.add(char);
+        } else if (char == 91) {
+          // found "["
+          readY = true;
+        }
+
+        counter++;
+      }
+
+      final int? x = int.tryParse(String.fromCharCodes(xBytes));
+      final int? y = int.tryParse(String.fromCharCodes(yBytes));
+
+      if (x == null || y == null) {
+        throw Exception(
+          'Unexpected cursor position report: ${String.fromCharCodes(yBytes)};${String.fromCharCodes(xBytes)}',
+        );
+      }
+
+      return ConsoleCoordinate(x, y);
+    } catch (e) {
+      rethrow;
+    } finally {
+      _stdin.echoMode = true;
+      _stdin.lineMode = prevLineMode;
+    }
+  }
+
+  void draw(
+    ConsoleComponent component, {
+    bool restoreCursor = false,
+    ConsoleCoordinate? cursor,
+  }) {
+    if (restoreCursor) {
+      cursor ??= getCursorPosition();
+    }
+
+    if (component is AbsoluteConsoleComponent) {
+      component.draw(this);
+    } else if (component is RelativeConsoleComponent) {
+      cursor ??= getCursorPosition();
+      component.draw(this, cursor);
+    }
+
+    if (restoreCursor) {
+      moveToCoordinate(cursor!);
+    }
+  }
+
+  void drawMultiple(
+    Iterable<AbsoluteConsoleComponent> components, {
+    bool restoreCursor = true,
+    ConsoleCoordinate? cursor,
+  }) {
+    if (restoreCursor) {
+      cursor ??= getCursorPosition();
+    }
+
+    for (final component in components) {
+      component.draw(this);
+    }
+
+    if (restoreCursor) {
+      moveToCoordinate(cursor!);
+    }
+  }
+
   void moveUp([int n = 1]) {
     _stdout.write(ConsoleStrings.cursorUp(n));
   }
@@ -126,6 +228,10 @@ class ConsoleExecutor {
 
   void moveTo(int x, int y) {
     _stdout.write(ConsoleStrings.cursorTo(x, y));
+  }
+
+  void moveToCoordinate(ConsoleCoordinate coordinate) {
+    moveTo(coordinate.x, coordinate.y);
   }
 
   void moveToTopLeft() {

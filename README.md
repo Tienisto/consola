@@ -1,10 +1,10 @@
-# consola
+# Consola
 
 [![pub package](https://img.shields.io/pub/v/consola.svg)](https://pub.dev/packages/consola)
 ![ci](https://github.com/Tienisto/consola/actions/workflows/ci.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Consola provides utilities for command-line applications.
+A utility library to help developing command-line applications in Dart. Provides screen manipulation, ANSI escape codes, and more.
 
 ## Table of Contents
 
@@ -13,6 +13,10 @@ Consola provides utilities for command-line applications.
 - [Screen Manipulation](#screen-manipulation)
 - [Colors](#colors)
 - [Dimensions](#dimensions)
+- [User Input](#user-input)
+- [Components](#components)
+  - [Progress Bar](#-progress-bar)
+- [ANSI Escape Codes](#ansi-escape-codes)
 - [Mocking](#mocking)
 
 ## Getting Started
@@ -66,6 +70,60 @@ You can get the dimensions of the terminal.
 void main() {
   int width = Console.getWindowWidth();
   int height = Console.getWindowHeight();
+}
+```
+
+## User Input
+
+You can read the user input in a type-safe way.
+
+```dart
+void main() {
+  int? age = Console.readInt(prompt: 'Enter your age: ');
+  Console.writeLine('You are $age years old.');
+}
+```
+
+## Components
+
+There is a set of components that you can use to speed up the development of your command-line applications.
+
+The state is stored in a component. You can draw the component by calling `Console.draw(component)`.
+
+### ➤ Progress Bar
+
+A horizontal progress bar.
+
+```dart
+void main() {
+  Console.clearScreen();
+
+  final progressBar = ProgressBar.atPosition(
+    total: 50,
+    width: 100,
+    position: ConsoleCoordinate(1, 2),
+    head: 'Progress A: ',
+    barFillCharacter: '#',
+    tailBuilder: (_, __, percent) => ' ${percent.toStringAsFixed(0)}%',
+  );
+
+  for (var i = 0; i <= 50; i++) {
+    progressBar.current = i;
+    Console.draw(progressBar);
+    sleep(Duration(milliseconds: 50));
+  }
+}
+```
+
+## ANSI Escape Codes
+
+You can access the underlying ANSI escape codes by accessing the `ConsoleStrings` class.
+
+```dart
+void main() {
+  String eraseScreen = ConsoleStrings.eraseScreen;
+  String esc = ConsoleStrings.escape;
+  String csi = ConsoleStrings.csi;
 }
 ```
 

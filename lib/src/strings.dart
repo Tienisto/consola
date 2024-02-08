@@ -8,16 +8,16 @@ class ConsoleStrings {
   // C0 control codes
   // https://en.wikipedia.org/wiki/ANSI_escape_code#C0_control_codes
 
-  static const bell = '\u0007';
-  static const backSpace = '\u0008';
-  static const tab = '\u0009';
-  static const lineFeed = '\u000A';
-  static const formFeed = '\u000C';
-  static const carriageReturn = '\u000D';
-  static const escape = '\u001B';
+  static const String bell = '\u0007';
+  static const String backSpace = '\u0008';
+  static const String tab = '\u0009';
+  static const String lineFeed = '\u000A';
+  static const String formFeed = '\u000C';
+  static const String carriageReturn = '\u000D';
+  static const String escape = '\u001B';
 
-  static const csi = '$escape[';
-  static const osc = '$escape]';
+  static const String csi = '$escape[';
+  static const String osc = '$escape]';
 
   // CSI sequences
   // https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_(Control_Sequence_Introducer)_sequences
@@ -49,7 +49,7 @@ class ConsoleStrings {
 
   /// Moves the cursor to the specific position (x, y).
   /// Indices start at 1, not 0.
-  static String cursorTo(int x, int y) => '$csi$x;${y}H';
+  static String cursorTo(int x, int y) => '$csi$y;${x}H';
 
   /// Moves the cursor to the top left.
   static String cursorToHome = '${csi}H';
@@ -89,6 +89,10 @@ class ConsoleStrings {
 
   /// Scroll down by n lines. New lines are added at the top.
   static String scrollDown(int n) => '$csi${n}T';
+
+  /// Returns the cursor position in `ESC[n;mR` format
+  /// where n is the row and m is the column.
+  static String deviceStatusReport = '${csi}6n';
 
   /// Native color sequence.
   static String setColorNative({
