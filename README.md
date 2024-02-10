@@ -18,6 +18,8 @@ A utility library to help developing command-line applications in Dart. Provides
   - [Progress Bar](#-progress-bar)
 - [ANSI Escape Codes](#ansi-escape-codes)
 - [Mocking](#mocking)
+- [Examples](#examples)
+  - [Rerender a section of the screen](#-rerender-a-section-of-the-screen)
 
 ## Getting Started
 
@@ -41,13 +43,13 @@ void main() {
 
 ## Screen Manipulation
 
-You can clear the desired part screen.
+You can clear a section of the screen.
 
 ```dart
 void main() {
   Console.clearScreen();
   Console.clearLine();
-  Console.clearCurrentToStartScreen();
+  Console.clearCurrentToScreenEnd();
 }
 ```
 
@@ -88,7 +90,7 @@ void main() {
 
 There is a set of components that you can use to speed up the development of your command-line applications.
 
-The state is stored in a component. You can draw the component by calling `Console.draw(component)`.
+The state is stored in the component. You can draw the component by calling `Console.draw(component)`.
 
 ### ➤ Progress Bar
 
@@ -145,6 +147,32 @@ void main() {
   Console.clearScreen(); // clears the screen
   Console.instance = MockConsoleExecutor();
   Console.clearScreen(); // prints "Screen cleared"
+}
+```
+
+## Examples
+
+### ➤ Rerender a section of the screen
+
+To rerender a section of the screen, you need to save and restore the cursor position.
+
+```dart
+void main() {
+  // Saving and restoring cursor position is relative.
+  // It doesn't work if the cursor is already at the bottom so
+  // we need to add some empty lines to make sure it works.
+  Console.addEmptyLinesToBottom(2);
+  Console.saveCursorPosition();
+
+  Console.writeLine('Survey (1/2)');
+  final name = Console.readLine(prompt: 'Enter name: ');
+
+  Console.restoreCursorPosition();
+  Console.clearCurrentToScreenEnd();
+
+  Console.writeLine('Survey (2/2)');
+  final age = Console.readInt(prompt: 'Enter age: ');
+  Console.writeLine('Hello, $name! You are $age years old.');
 }
 ```
 

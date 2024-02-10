@@ -305,4 +305,21 @@ class ConsoleExecutor {
   void scrollDown(int n) {
     _stdout.write(ConsoleStrings.scrollDown(n));
   }
+
+  void saveCursorPosition() {
+    _stdout.write(ConsoleStrings.saveCursorPosition);
+  }
+
+  void restoreCursorPosition() {
+    _stdout.write(ConsoleStrings.restoreCursorPosition);
+  }
+
+  void addEmptyLinesToBottom(int n) {
+    for (var i = 0; i < n; i++) {
+      _stdout.writeln();
+    }
+    for (var i = 0; i < n; i++) {
+      moveUp();
+    }
+  }
 }

@@ -94,6 +94,26 @@ class ConsoleStrings {
   /// where n is the row and m is the column.
   static String deviceStatusReport = '${csi}6n';
 
+  /// Saves the cursor position (SCO standard).
+  static String saveCursorPositionSco = '${csi}s';
+
+  /// Saves the cursor position (DEC standard).
+  static String saveCursorPositionDec = '${escape}7';
+
+  /// Saves the cursor position (maximum compatibility).
+  static String saveCursorPosition =
+      saveCursorPositionSco + saveCursorPositionDec;
+
+  /// Restores the cursor position (SCO standard).
+  static String restoreCursorPositionSco = '${csi}u';
+
+  /// Restores the cursor position (DEC standard).
+  static String restoreCursorPositionDec = '${escape}8';
+
+  /// Restores the cursor position (maximum compatibility).
+  static String restoreCursorPosition =
+      restoreCursorPositionSco + restoreCursorPositionDec;
+
   /// Native color sequence.
   static String setColorNative({
     int? foreground,

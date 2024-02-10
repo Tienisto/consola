@@ -235,4 +235,27 @@ class Console {
   static void scrollDown(int n) {
     instance.scrollDown(n);
   }
+
+  /// Saves the cursor position.
+  /// Overwrites the previous saved cursor position if any.
+  /// Use [restoreCursorPosition] to restore the cursor position.
+  ///
+  /// **Note**:
+  /// Saving and restoring the cursor position is relative.
+  /// This will likely not work if the cursor is already at the bottom.
+  /// Use [addEmptyLinesToBottom] to resolve this issue.
+  static void saveCursorPosition() {
+    instance.saveCursorPosition();
+  }
+
+  /// Restores the cursor position saved by [saveCursorPosition].
+  static void restoreCursorPosition() {
+    instance.restoreCursorPosition();
+  }
+
+  /// Adds empty lines below the current line
+  /// without changing the cursor position.
+  static void addEmptyLinesToBottom(int n) {
+    instance.addEmptyLinesToBottom(n);
+  }
 }
