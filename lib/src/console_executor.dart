@@ -206,11 +206,11 @@ class ConsoleExecutor {
     _stdout.write(ConsoleStrings.cursorDown(n));
   }
 
-  void moveForward([int n = 1]) {
+  void moveRight([int n = 1]) {
     _stdout.write(ConsoleStrings.cursorForward(n));
   }
 
-  void moveBackward([int n = 1]) {
+  void moveLeft([int n = 1]) {
     _stdout.write(ConsoleStrings.cursorBackward(n));
   }
 
@@ -254,12 +254,12 @@ class ConsoleExecutor {
     _stdout.write(ConsoleStrings.eraseDisplayNative(n));
   }
 
-  void clearCurrentToEndScreen() {
-    _stdout.write(ConsoleStrings.eraseCurrentToEndScreen);
+  void clearCurrentToScreenEnd() {
+    _stdout.write(ConsoleStrings.eraseCurrentToScreenEnd);
   }
 
-  void clearCurrentToStartScreen() {
-    _stdout.write(ConsoleStrings.eraseCurrentToStartScreen);
+  void clearCurrentToScreenStart() {
+    _stdout.write(ConsoleStrings.eraseCurrentToScreenStart);
   }
 
   void clearScreen({bool resetCursor = true}) {
@@ -280,12 +280,12 @@ class ConsoleExecutor {
     _stdout.write(ConsoleStrings.eraseLineNative(n));
   }
 
-  void clearCurrentToEndLine() {
-    _stdout.write(ConsoleStrings.eraseCurrentToEndLine);
+  void clearCurrentToLineEnd() {
+    _stdout.write(ConsoleStrings.eraseCurrentToLineEnd);
   }
 
-  void clearCurrentToStartLine() {
-    _stdout.write(ConsoleStrings.eraseCurrentToStartLine);
+  void clearCurrentToLineStart() {
+    _stdout.write(ConsoleStrings.eraseCurrentToLineStart);
   }
 
   void clearLine({bool resetCursor = true}) {

@@ -55,15 +55,15 @@ class ConsoleStrings {
   static String cursorToHome = '${csi}H';
 
   /// Native erase display sequence.
-  /// Use [eraseCurrentToEndScreen], [eraseCurrentToStartScreen],
+  /// Use [eraseCurrentToScreenEnd], [eraseCurrentToScreenStart],
   /// [eraseScreen], [eraseScreenClearScrollback] for convenience.
   static String eraseDisplayNative(int n) => '$csi${n}J';
 
   /// Erases from the current cursor position to the end of the screen.
-  static String eraseCurrentToEndScreen = eraseDisplayNative(0);
+  static String eraseCurrentToScreenEnd = eraseDisplayNative(0);
 
   /// Erases from the current cursor position to the start of the screen.
-  static String eraseCurrentToStartScreen = eraseDisplayNative(1);
+  static String eraseCurrentToScreenStart = eraseDisplayNative(1);
 
   /// Erases the entire screen.
   /// Moves the cursor to the top left (only on DOS with ANSI.SYS).
@@ -76,10 +76,10 @@ class ConsoleStrings {
   static String eraseLineNative(int n) => '$csi${n}K';
 
   /// Erases from the current cursor position to the end of the line.
-  static String eraseCurrentToEndLine = eraseLineNative(0);
+  static String eraseCurrentToLineEnd = eraseLineNative(0);
 
   /// Erases from the current cursor position to the start of the line.
-  static String eraseCurrentToStartLine = eraseLineNative(1);
+  static String eraseCurrentToLineStart = eraseLineNative(1);
 
   /// Erases the entire current line. Cursor position does not change.
   static String eraseLine = eraseLineNative(2);

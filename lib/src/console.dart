@@ -126,14 +126,14 @@ class Console {
 
   /// Moves the cursor forward (right) by [n] columns; the default is 1.
   /// If the cursor is already at the edge of the screen, this has no effect.
-  static void moveForward([int n = 1]) {
-    instance.moveForward(n);
+  static void moveRight([int n = 1]) {
+    instance.moveRight(n);
   }
 
   /// Moves the cursor backward (left) by [n] columns; the default is 1.
   /// If the cursor is already at the edge of the screen, this has no effect.
-  static void moveBackward([int n = 1]) {
-    instance.moveBackward(n);
+  static void moveLeft([int n = 1]) {
+    instance.moveLeft(n);
   }
 
   /// Moves the cursor to the beginning of the line [n] lines down (default 1).
@@ -178,20 +178,20 @@ class Console {
   }
 
   /// Native erase display sequence.
-  /// Use [eraseCurrentToEndScreen], [eraseCurrentToStartScreen],
-  /// [eraseScreen], [eraseScreenClearScrollback] for convenience.
+  /// Use [clearCurrentToScreenEnd], [clearCurrentToScreenStart],
+  /// [clearScreen], [clearScreenClearScrollback] for convenience.
   static void clearDisplayNative(int n) {
     instance.clearDisplayNative(n);
   }
 
   /// Erases from the current cursor position to the end of the screen.
-  static void clearCurrentToEndScreen() {
-    instance.clearCurrentToEndScreen();
+  static void clearCurrentToScreenEnd() {
+    instance.clearCurrentToScreenEnd();
   }
 
   /// Erases from the current cursor position to the start of the screen.
-  static void clearCurrentToStartScreen() {
-    instance.clearCurrentToStartScreen();
+  static void clearCurrentToScreenStart() {
+    instance.clearCurrentToScreenStart();
   }
 
   /// Erases the entire screen.
@@ -211,13 +211,13 @@ class Console {
   }
 
   /// Erases from the current cursor position to the end of the line.
-  static void clearCurrentToEndLine() {
-    instance.clearCurrentToEndLine();
+  static void clearCurrentToLineEnd() {
+    instance.clearCurrentToLineEnd();
   }
 
   /// Erases from the current cursor position to the start of the line.
-  static void clearCurrentToStartLine() {
-    instance.clearCurrentToStartLine();
+  static void clearCurrentToLineStart() {
+    instance.clearCurrentToLineStart();
   }
 
   /// Erases the entire current line.
