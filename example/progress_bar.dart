@@ -11,10 +11,12 @@ void main() {
 
   final progressBar = ProgressBar.atPosition(
     total: 50,
-    width: 100,
+    width: 50,
     position: ConsoleCoordinate(1, 2),
     head: 'Progress A: ',
-    barFillCharacter: '#',
+    barFillCharacter: '=',
+    barTipCharacter: '>',
+    barSpaceCharacter: '-',
     tailBuilder: (_, __, percent) => ' ${percent.toStringAsFixed(0)}%',
   );
 
@@ -28,10 +30,13 @@ void main() {
 
   final atCursorBar = ProgressBar.atCursor(
     total: 50,
-    width: 100,
+    width: 50,
     console: Console.instance,
     head: 'Progress C: ',
+    barHead: '|',
+    barTail: '|',
     barFillCharacter: '#',
+    barSpaceCharacter: '.',
     tailBuilder: (_, __, percent) => ' ${percent.toStringAsFixed(0)}%',
   );
 

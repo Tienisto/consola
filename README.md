@@ -96,6 +96,12 @@ The state is stored in the component. You can draw the component by calling `Con
 
 A horizontal progress bar.
 
+```text
+Progress A: [##################              ] 58%
+Progress B: [=================>--------------] 58%
+Progress C: |##################..............| 12 MB/s 58%
+```
+
 ```dart
 void main() {
   Console.clearScreen();

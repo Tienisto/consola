@@ -18,22 +18,32 @@ class ProgressBar extends AbsoluteConsoleComponent {
   final String barHead;
   final String barTail;
   final String barFillCharacter;
+  final String barTipCharacter;
+  final String barSpaceCharacter;
   final ConsoleCoordinate position;
 
   ProgressBar._({
-    int? current,
+    required int? current,
     required this.total,
     required this.width,
-    required this.headBuilder,
-    required this.tailBuilder,
-    String? barHead,
-    String? barTail,
-    String? barFillCharacter,
+    required String? head,
+    required ProgressBarTextBuilder? headBuilder,
+    required String? tail,
+    required ProgressBarTextBuilder? tailBuilder,
+    required String? barHead,
+    required String? barTail,
+    required String? barFillCharacter,
+    required String? barTipCharacter,
+    required String? barSpaceCharacter,
     required this.position,
   })  : current = current ?? 0,
+        headBuilder = (head != null ? (_, __, ___) => head : headBuilder),
+        tailBuilder = (tail != null ? (_, __, ___) => tail : tailBuilder),
         barHead = barHead ?? '[',
         barTail = barTail ?? ']',
-        barFillCharacter = barFillCharacter ?? '=';
+        barFillCharacter = barFillCharacter ?? '#',
+        barTipCharacter = barTipCharacter ?? '',
+        barSpaceCharacter = barSpaceCharacter ?? ' ';
 
   factory ProgressBar.atPosition({
     int? current,
@@ -48,6 +58,8 @@ class ProgressBar extends AbsoluteConsoleComponent {
     String? barHead,
     String? barTail,
     String? barFillCharacter,
+    String? barTipCharacter,
+    String? barSpaceCharacter,
   }) {
     return ProgressBar._(
       current: current,
@@ -56,11 +68,15 @@ class ProgressBar extends AbsoluteConsoleComponent {
           (console != null
               ? (console.getWindowWidth() - position.x + 1)
               : throw 'Specify width or provide a console.'),
-      headBuilder: (head != null ? (_, __, ___) => head : headBuilder),
-      tailBuilder: (tail != null ? (_, __, ___) => tail : tailBuilder),
+      head: head,
+      headBuilder: headBuilder,
+      tail: tail,
+      tailBuilder: tailBuilder,
       barHead: barHead,
       barTail: barTail,
       barFillCharacter: barFillCharacter,
+      barTipCharacter: barTipCharacter,
+      barSpaceCharacter: barSpaceCharacter,
       position: position,
     );
   }
@@ -77,17 +93,23 @@ class ProgressBar extends AbsoluteConsoleComponent {
     String? barHead,
     String? barTail,
     String? barFillCharacter,
+    String? barTipCharacter,
+    String? barSpaceCharacter,
   }) {
     final currentPosition = console.getCursorPosition();
     return ProgressBar._(
       current: current,
       total: total,
       width: width ?? (console.getWindowWidth() - currentPosition.x + 1),
-      headBuilder: (head != null ? (_, __, ___) => head : headBuilder),
-      tailBuilder: (tail != null ? (_, __, ___) => tail : tailBuilder),
+      head: head,
+      headBuilder: headBuilder,
+      tail: tail,
+      tailBuilder: tailBuilder,
       barHead: barHead,
       barTail: barTail,
       barFillCharacter: barFillCharacter,
+      barTipCharacter: barTipCharacter,
+      barSpaceCharacter: barSpaceCharacter,
       position: currentPosition,
     );
   }
@@ -100,14 +122,20 @@ class ProgressBar extends AbsoluteConsoleComponent {
   void draw(ConsoleExecutor console) {
     final percent = current / total;
     final percent100 = percent * 100;
+
     final head = headBuilder?.call(current, total, percent100) ?? '';
     final tail = tailBuilder?.call(current, total, percent100) ?? '';
     final barWidth =
         width - head.length - tail.length - barHead.length - barTail.length;
-    final bar = barFillCharacter * (barWidth * percent).floor();
-    final space = ' ' * (barWidth - bar.length);
+
+    final tipCharacter = percent == 1 ? '' : barTipCharacter;
+
+    final String bar =
+        barFillCharacter * ((barWidth * percent).floor() - tipCharacter.length);
+    final String space =
+        barSpaceCharacter * (barWidth - bar.length - tipCharacter.length);
 
     console.moveToCoordinate(position);
-    console.write('$head$barHead$bar$space$barTail$tail');
+    console.write('$head$barHead$bar$tipCharacter$space$barTail$tail');
   }
 }
