@@ -11,6 +11,8 @@ void main() {
     ],
     rowBuilder: (row) => row,
     headers: ['Name', 'Age', 'Country'],
+    headerSeparator: '-',
+    defaultHorizontalAlignment: TextAlignment.right,
     position: ConsoleCoordinate(1, 1),
   );
 
